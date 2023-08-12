@@ -1,5 +1,4 @@
-from Personagens import Personagem, NPC
-from Heroi import Heroi
+from NPC import NPC
 from Mago import Mago
 from Batalha import *
 
@@ -7,9 +6,14 @@ from math import floor
 from rich import inspect
 
 p = Mago('gab', 'mago', 'arqueiro')
-p2 = Personagem('memis', 'mago', 'arqueiro')
-inspect(p2)
-print(p2)
+for _ in range(50):
+    npc = NPC(p.nivel, 'npccc', 'memeiro', 'tunado')
+    print(f"O NPC VAI DAR {npc.xp}")
+    b = Batalha(p, npc)
+    b.inicia()
+    inspect(p)
+    input()
+
 
 
 # npc = NPC(p.get_nivel(), 'ini', 'raca', 'classsse', 'npc')

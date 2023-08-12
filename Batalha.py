@@ -13,19 +13,17 @@ class Batalha:
         if self._verbose: print(f"{self.jogador.nome} vs. {self.npc.nome}")
 
     def recupera_vida(self):
-        self.jogador.set_hp(self.jogador.get_hp_max())
-        self.npc.set_hp(self.npc.get_hp_max())
-        self.jogador.revive()        
-        self.npc.revive()
+        self.jogador.set_hp(self.jogador.hp_max)
+        self.npc.set_hp(self.npc.hp_max)
+        self.jogador.revive()
 
     def inicia(self):
-        while self.jogador.get_hp() > 0 and self.npc.get_hp() > 0:
+        while self.jogador.hp > 0 and self.npc.hp > 0:
             # sleep(1)
             self.jogador.atacar(self.npc)
-            # print(f"{self.npc.nome}: {self.npc.hp}")
-            # sleep(1)
+            print(f"{self.npc.nome}: {self.npc.hp}")
             self.npc.atacar(self.jogador)
-            # print(f"{self.jogador.nome}: {self.jogador.hp}")
+            print(f"{self.jogador.nome}: {self.jogador.hp}")
             # print(f"{self.jogador.get_nome()} ({self.jogador.get_hp()}) x {self.npc.get_nome()} ({self.npc.get_hp()})")
         self.finalizada = True
         if self._verbose:

@@ -6,68 +6,83 @@ import csv
 
 class Personagem:
     def __init__(self, nome, raca, classe):
-        self.info_nome = nome
-        self.info_raca = raca
-        self.info_classe = classe
-        self.info_nivel = 1
+        self._info_nome = nome
+        self._info_raca = raca
+        self._info_classe = classe
+        self._info_nivel = 1
+        self._tipo = 'eu'
 
         self.vivo = True
 
-        self.xp = 0
-        self.XP_MAX = 150
-        self.hp = 150
-        self.HP_MAX = 150
-        self.mana = 100
-        self.MANA_MAX = 100
+        self._xp = 0
+        self._XP_MAX = 150
+        self._hp = 150
+        self._HP_MAX = 150
+        self._mana = 100
+        self._MANA_MAX = 100
 
     def __str__(self):
         return f"""
-NOME: {self.get_nome()}
-RACA: {self.get_raca()}
-CLASSE: {self.get_classe()}
-NIVEL: {self.get_nivel()}
+NOME: {self.nome}
+RACA: {self.raca}
+CLASSE: {self.classe}
+NIVEL: {self.nivel}
 
 VIVO: {self.esta_vivo()}
-HP: {self.get_hp()} / {self.get_hp_max()}
-XP: {self.get_xp()} / {self.get_xp_max()}
-MANA: {self.get_mana()} / {self.get_mana_max()}
+HP: {self.hp} / {self.hp_max}
+XP: {self.xp} / {self.xp_max}
+MANA: {self.mana} / {self.mana_max}
 """
 
-    def get_nome(self):
-        return self.info_nome
+    @property
+    def tipo(self):
+        return self._tipo
+    
+    @property
+    def nome(self):
+        return self._info_nome
 
-    def get_raca(self):
-        return self.info_raca
+    @property
+    def raca(self):
+        return self._info_raca
 
-    def get_classe(self):
-        return self.info_classe
+    @property
+    def classe(self):
+        return self._info_classe
 
-    def get_nivel(self):
-        return self.info_nivel
+    @property
+    def nivel(self):
+        return self._info_nivel
     
     def esta_vivo(self):
         return self.vivo
     
-    def get_hp(self):
-        return self.hp
+    @property
+    def hp(self):
+        return self._hp
 
-    def get_hp_max(self):
-        return self.HP_MAX
+    @property
+    def hp_max(self):
+        return self._HP_MAX
 
-    def get_xp(self):
-        return self.xp
+    @property
+    def xp(self):
+        return self._xp
 
-    def get_xp_max(self):
-        return self.XP_MAX
+    @property
+    def xp_max(self):
+        return self._XP_MAX
     
-    def get_mana(self):
-        return self.mana
+    @property
+    def mana(self):
+        return self._mana
 
     def set_hp(self, valor):
-        self.hp = valor
+        self._hp = valor
     
-    def get_mana_max(self):
-        return self.MANA_MAX
+    @property
+    def mana_max(self):
+        return self._MANA_MAX
     
     # Métodos em combate    
 
@@ -76,44 +91,63 @@ MANA: {self.get_mana()} / {self.get_mana_max()}
 
     def heala(self, qtd=None):
         if qtd is None:
-            self.hp = self.HP_MAX
+            self._hp = self._HP_MAX
         else:
-            self.hp = qtd
+            self._hp = qtd
 
     def toma_dano(self, dano):
-        self.hp -= dano
+        self._hp -= dano
 
     def __forca_ataque(self, level: int):
         forca = 1 * level
         return forca
 
     def upar(self):
-        self.info_nivel += 1
+        print(f"UPOU DO NIVEL {self._info_nivel} para o {self._info_nivel+1}")
+        self._info_nivel += 1
+        self._XP_MAX += 150
+        self.atk_arma = self.nivel * 10
+        self.atk_pet = self.nivel * 3
+        self.atk_magia = self.nivel * 4
+        self.def_magia = self.nivel * 0
 
+    def venceu_batalha(self, inimigo: 'Personagem'):
+        if self.tipo == 'npc':
+            inimigo.add_derrota()
+            inimigo.add_partida()
+        elif self.tipo == 'eu':
+            self.add_xp(inimigo.xp)
+            self.add_vitoria()
+            self.add_partida()
+            while self.xp >= self.xp_max:
+                self.add_xp(-self.xp_max)
+                self.upar()
+
+    
     def atacar(self, inimigo: "Personagem"):
-        # print(f"{self.get_nome()} está atacando {inimigo.get_nome()}")
+        # print(f"{self.nome} está atacando {inimigo.nome}")
         if inimigo.esta_vivo() and self.esta_vivo():
-            dano = round(self.get_nivel() * self.atk_arma * inimigo.defesa)
+            dano = round(self.nivel * self.atk_arma * inimigo.defesa)
             # dano = self.ataque
 
             # tratar o dano negativo enquanto não implemento tipos de ataque
             if dano < 0:
                 dano = 0
 
-            if dano >= inimigo.get_hp():
-                dano = inimigo.get_hp()
+            if dano >= inimigo.hp: # hit kill
+                dano = inimigo.hp
                 inimigo.morre()
                 self.venceu_batalha(inimigo)
                 # exit
-            # print(dano)
-            # print(f"[r][b]{self.info_nome.upper()}[/b][/r] tirou [red b u]{dano}[/] de [r][b]{inimigo.nome.upper()}[/r][/b] usando [red b u]{self.item_arma}[/]")
+            print(dano)
+            # print(f"[r][b]{self._info_nome.upper()}[/b][/r] tirou [red b u]{dano}[/] de [r][b]{inimigo.nome.upper()}[/r][/b] usando [red b u]{self.item_arma}[/]")
             inimigo.toma_dano(dano)
             # print(f"{inimigo.nome.upper()} ficou com {inimigo.hp} de vida!")
 
-            # print(f"{self.info_nome} não pode atacar pois {inimigo.nome} já está morto.")
+            # print(f"{self._info_nome} não pode atacar pois {inimigo.nome} já está morto.")
             # exit
 
-    def get_instance_attributes(self):
+    def instance_attributes(self):
         return [
             attr
             for attr in dir(self)
@@ -122,7 +156,7 @@ MANA: {self.get_mana()} / {self.get_mana_max()}
 
     def append_to_csv(self, filename="docs/chars.csv"):
         file_exists = os.path.exists(filename)
-        instance_attributes = self.get_instance_attributes()
+        instance_attributes = self.instance_attributes
 
         with open(filename, mode="a", newline="") as file:
             writer = csv.writer(file)
@@ -183,22 +217,3 @@ MANA: {self.get_mana()} / {self.get_mana_max()}
     #     parametros = char.to_dict('records')[0]
 
     #     return cls.gera_personagem(parametros)
-
-
-class NPC(Personagem):
-    def __init__(self, player_level, nome, raca, classe, tipo) -> None:
-        print("oi")
-        super().__init__(nome, raca, classe, tipo)
-        if player_level > 1:
-            self.info_nivel = randint(int(player_level * 0.5), int(player_level * 1.5))
-        else:
-            self.info_nivel = 1
-
-        self.xp = 10
-        self.XP_MAX = 150
-        self.hp = 150
-        self.HP_MAX = 150
-        self.vivo = True
-
-    def __str__(self) -> str:
-        return super().__str__() + "NPC FIÃO"

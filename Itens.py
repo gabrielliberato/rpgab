@@ -6,7 +6,3 @@ class ItemAtaque:
         self.ataque = ataque
         self.defesa = defesa
         self.especial = especial
-
-class ItemInicialMago:
-    def __init__(self) -> None:
-        pass

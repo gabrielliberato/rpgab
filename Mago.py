@@ -53,7 +53,7 @@ class Mago(Heroi):
         self.inv_items = {"anel da sabedoria": {"nivel": 1, "atk": 3, "def": 0, "especial": 80, "tipo": "light"}}
 
         self.item_usado_arma = Mago.usa_item(self.inv_armas, "earth")
-        self.atk_arma = self.item_usado_arma['atk']
+        self.atk_arma = self.item_usado_arma['atk'] * 100
         self.item_usado_escudo = Mago.usa_item(self.inv_escudos, "earth")
         self.def_escudo = self.item_usado_escudo['def']
         self.item_usado_armadura = Mago.usa_item(self.inv_armaduras, "earth")

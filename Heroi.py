@@ -10,36 +10,37 @@ class Heroi(Personagem):
         self.stat_derrotas = 0
         self.stat_partidas_jogadas = 0
         self.gold = 0
+        self._tipo = 'eu'
 
     def get_vitorias(self):
-        return self.vitorias
+        return self.stat_vitorias
 
     def add_vitoria(self):
-        self.vitorias += 1
+        self.stat_vitorias += 1
 
     def get_derrotas(self):
-        return self.derrotas
+        return self.stat_derrotas
 
     def add_derrota(self):
-        self.derrotas += 1
+        self.stat_derrotas += 1
 
     def get_partidas(self):
-        return self.partidas_jogadas
+        return self.stat_partidas_jogadas
 
     def add_partida(self):
-        self.partidas_jogadas += 1
+        self.stat_partidas_jogadas += 1
 
     def revive(self):
         self.vivo = True
 
     def add_xp(self, qtd):
-        self.xp += qtd
+        self._xp += qtd
 
     def add_xp_max(self, qtd):
-        self.XP_MAX + qtd
+        self._XP_MAX + qtd
 
     def set_xp_max(self, valor):
-        self.XP_MAX = valor
+        self._XP_MAX = valor
 
     def set_hp_max(self, valor):
-        self.HP_MAX = valor
+        self._HP_MAX = valor
