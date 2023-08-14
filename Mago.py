@@ -19,7 +19,15 @@ class Mago(Heroi):
                 "def": 0,
                 "especial": 2,
                 "tipo": "earth",
-            }
+            },
+            "varinha": {
+                "nivel": 1,
+                "atk": 6,
+                "def": 1,
+                "especial": 2,
+                "tipo": "energy",
+            },
+            
         }
         self.inv_escudos = {
             "escudo de lata": {
@@ -53,7 +61,8 @@ class Mago(Heroi):
         self.inv_items = {"anel da sabedoria": {"nivel": 1, "atk": 3, "def": 0, "especial": 80, "tipo": "light"}}
 
         self.item_usado_arma = Mago.usa_item(self.inv_armas, "earth")
-        self.atk_arma = self.item_usado_arma['atk'] * 100
+        self.nome_item_usado_arma = list(self.inv_armas.keys())[0]
+        self.atk_arma = self.item_usado_arma['atk']
         self.item_usado_escudo = Mago.usa_item(self.inv_escudos, "earth")
         self.def_escudo = self.item_usado_escudo['def']
         self.item_usado_armadura = Mago.usa_item(self.inv_armaduras, "earth")
@@ -63,10 +72,18 @@ class Mago(Heroi):
         self.item_usado_magia = Mago.usa_item(self.inv_magias, "wind")
         self.atk_magia = self.item_usado_magia['atk']
         self.def_magia = self.item_usado_magia['def']
-        self.defesa = round(self.def_armadura * self.def_escudo, 2)
+        self.defesa = self.def_armadura + self.def_escudo
   
+    
+    
     def get_ataque(self):
         return self.atk_arma
 
     def get_defesa(self):
         return self.defesa
+    
+    def __str__(self):
+        return super().__str__() \
+            + f"""DEFESA: {self.defesa}
+GOLD: {self.gold}
+============================================================\n"""

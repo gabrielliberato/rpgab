@@ -1,16 +1,18 @@
 from Personagens import Personagem
+from Heroi import Heroi
+from NPC import NPC
 from time import sleep
 
 class Batalha:
-    def __init__(self, jogador: Personagem, npc: Personagem, verbose=False) -> None:
+    def __init__(self, jogador: Heroi, npc: NPC, verbose=False) -> None:
         self.jogador = jogador
-        self._verbose = verbose
+        self.verbose = verbose
         self.npc = npc
         self.msg()
         self.finalizada = False
 
     def msg(self):
-        if self._verbose: print(f"{self.jogador.nome} vs. {self.npc.nome}")
+        if self.verbose: print(f"{self.jogador.nome} vs. {self.npc.nome}")
 
     def recupera_vida(self):
         self.jogador.set_hp(self.jogador.hp_max)
@@ -18,27 +20,43 @@ class Batalha:
         self.jogador.revive()
 
     def inicia(self):
+
+        self.jogador.prepara()
+        input("Começar partida? ")
+
         while self.jogador.hp > 0 and self.npc.hp > 0:
+            print(f"\n{self.jogador.nome} ({self.jogador.hp}) x {self.npc.nome} ({self.npc.hp})")
             # sleep(1)
             self.jogador.atacar(self.npc)
-            print(f"{self.npc.nome}: {self.npc.hp}")
+            # print(f"{self.npc.nome}: {self.npc.hp}")
             self.npc.atacar(self.jogador)
-            print(f"{self.jogador.nome}: {self.jogador.hp}")
-            # print(f"{self.jogador.get_nome()} ({self.jogador.get_hp()}) x {self.npc.get_nome()} ({self.npc.get_hp()})")
+            # print(f"{self.jogador.nome}: {self.jogador.hp}")
         self.finalizada = True
-        if self._verbose:
-            # print(self.jogador.get_nivel(), " -> ", self.jogador.get_xp())
-            pass
+        self.analisa_vencedor()
         self.recupera_vida()
 
-    def venceu_batalha(self, inimigo: 'Personagem'):
+    def analisa_vencedor(self):
+        if self.jogador.esta_vivo():
+            print(f"{self.jogador.nome} venceu!!")
+            self.jogador.add_xp(self.npc.xp)
+            self.jogador.add_gold(self.npc.gold)
+            self.jogador.add_vitoria()
+            while self.jogador.xp >= self.jogador.xp_max:
+                self.jogador.add_xp(-self.jogador.xp_max)
+                self.jogador.upar()
+        else:
+            self.jogador.add_derrota()
+        self.jogador.heala()
+    
+    def venceu_batalha(self, inimigo: NPC):
         if self.get_tipo() == 'npc':
-            if self._verbose: print("NPC ganhou fodasseeeee")
+            if self.verbose: print("NPC ganhou fodasseeeee")
             inimigo.add_derrota()
             inimigo.add_partida()
         elif self.get_tipo() == 'eu':
             self.add_xp(inimigo.get_xp())
-            if self._verbose: print(f"Eu ganhei - XP: {self.get_xp()}")
+            self.add_gold(inimigo.gold)
+            if self.verbose: print(f"Eu ganhei - XP: {self.get_xp()}")
             self.add_vitoria()
             self.add_partida()
             while self.get_xp() >= self.get_xp_max():
