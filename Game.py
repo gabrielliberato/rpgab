@@ -4,7 +4,7 @@ from Mago import Mago
 from Batalha import *
 
 from math import floor
-from rich import inspect
+from rich import inspect, print
 
 class Game:
     @staticmethod

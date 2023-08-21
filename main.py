@@ -4,17 +4,17 @@ from Mago import Mago
 from Batalha import *
 
 from math import floor
-from rich import inspect
+from rich import inspect, print
 
 p = Mago('gab', 'mago', 'arqueiro')
 for _ in range(20):
     npc = NPC(p.nivel, 'npccc', 'memeiro', 'tunado')
     print(f"O NPC VAI DAR {npc.xp}\n")
-    print(p)
+    # print(p)
     b = Batalha(p, npc)
     b.inicia()
     print(p)
-    inspect(p)
+#     inspect(p)
     # input()
 
 

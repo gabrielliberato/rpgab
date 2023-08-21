@@ -20,8 +20,6 @@ class Personagem:
         self.mana = -666
         self.mana_max = -666
 
-    
-
     def esta_vivo(self):
         return self.vivo
 
@@ -42,30 +40,61 @@ class Personagem:
     def toma_dano(self, dano):
         self.hp -= dano
 
-    def atacar(self, inimigo: "Personagem"):
-        # print(f"{self.nome} está atacando {inimigo.nome}")
-        if inimigo.esta_vivo() and self.esta_vivo():
-            dano = round(self.atk_arma - inimigo.defesa)
+    # def atacar(self, inimigo: "Personagem"):
+    #     # print(f"{self.nome} está atacando {inimigo.nome}")
+    #     if inimigo.esta_vivo() and self.esta_vivo():
+    #         dano = round(self.atk_arma - inimigo.defesa)
+    #         # dano = self.ataque
+
+    #         # tratar o dano negativo enquanto não implemento tipos de ataque
+    #         if dano < 0:
+    #             dano = 0
+
+    #         if dano >= inimigo.hp:  # hit kill
+    #             dano = inimigo.hp
+    #             inimigo.morre()
+    #             # self.venceu_batalha(inimigo)
+    #             # exit
+    #         # print(f"\t - {self.nome.upper()} tirou {dano} de dano de {inimigo.nome.upper()}")
+    #         print(
+    #             f"\t- [r][b]{self.nome.upper()}[/b][/r] tirou [red b u]{dano}[/] de [r][b]{inimigo.nome.upper()}[/r][/b] usando [red b u]{self.nome_item_usado_arma}[/]"
+    #         )
+    #         inimigo.toma_dano(dano)
+    #         # print(f"{inimigo.nome.upper()} ficou com {inimigo.hp} de vida!")
+
+    #         # print(f"{self.nome} não pode atacar pois {inimigo.nome} já está morto.")
+    #         # exit
+    #     else:
+    #         print("Ninguém pode atacar porque um jogador já morreu")
+    #         pass
+
+    def atacar(self, eu: 'Personagem'):
+        if eu.esta_vivo() and self.esta_vivo():
+            if randint(0, 100) <= self.prob_especial_arma:
+                dano = (self.atk_arma * 10) - eu.defesa
+            else:
+                dano = self.atk_arma - eu.defesa
+            # print(self.atk_arma, eu.defesa)
             # dano = self.ataque
 
             # tratar o dano negativo enquanto não implemento tipos de ataque
-            if dano < 0:
-                dano = 0
+            if dano <= 0:
+                dano_efetivo = 0
+            else:
+                dano_efetivo = dano
 
-            if dano >= inimigo.hp:  # hit kill
-                dano = inimigo.hp
-                inimigo.morre()
-                # self.venceu_batalha(inimigo)
+            if dano_efetivo >= eu.hp:  # hit kill
+                dano_efetivo = eu.hp
+                eu.morre()
+                # self.venceu_batalha(eu)
                 # exit
-            # print(f"\t - {self.nome.upper()} tirou {dano} de dano de {inimigo.nome.upper()}")
-            print(
-                f"\t- [r][b]{self.nome.upper()}[/b][/r] tirou [red b u]{dano}[/] de [r][b]{inimigo.nome.upper()}[/r][/b] usando [red b u]{self.nome_item_usado_arma}[/]"
-            )
-            inimigo.toma_dano(dano)
-            # print(f"{inimigo.nome.upper()} ficou com {inimigo.hp} de vida!")
-
-            # print(f"{self.nome} não pode atacar pois {inimigo.nome} já está morto.")
-            # exit
-        else:
-            print("Ninguém pode atacar porque um jogador já morreu")
-            pass
+            # print(f"\t - {self.nome.upper()} tirou {dano} de dano de {eu.nome.upper()}")
+            if dano_efetivo > 0:
+                print(
+                    f"\t- [r][b]{self.nome.upper()}[/b][/r] tirou [red b u]{dano}[/] de [r][b]{eu.nome.upper()}[/r][/b] usando [red b u]{self.nome_item_usado_arma}[/]"
+                )
+            else:
+                print(
+                    f"\t- [r][b]{self.nome.upper()}[/b][/r] [u]ERROU O ATAQUE[/] em [r][b]{eu.nome.upper()}[/r][/b] usando [red b u]{self.nome_item_usado_arma}[/]"
+                )
+            eu.toma_dano(dano_efetivo)
